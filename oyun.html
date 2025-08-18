@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Şekil Oyunu - Tangram Seçimi</title>
+  <style>
+    .block {
+      position: relative;
+      cursor: grab;
+      display: inline-block;
+      user-select: none;
+      transform-origin: center center;
+    }
+    .blockTray {
+      display: none; /* Başlangıçta tüm tepsiler gizli */
+      float: left;
+      width: 20%;
+      padding: 10px;
+      box-sizing: border-box;
+      min-height: 90vh;
+    }
+    #canvas {
+      float: left;
+      width: 70%;
+      height: 90vh;
+      background-color: #ecf0f1;
+      margin: 3%;
+      border-radius: 30px;
+      text-align: center;
+      box-sizing: border-box;
+    }
+    #instruction {
+      margin-top: 150px;
+      font-size: 24px;
+      color: #bdc3c7;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-image: url('https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=1600&q=80&auto=format&fit=crop');
+      background-size: cover;
+      font-family: Arial, sans-serif;
+    }
+    #buttonWrapper {
+      margin: 20px;
+      text-align: center;
+      clear: both;
+    }
+    .selectBtn {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 5px;
+      border: none;
+      border-radius: 8px;
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+    }
+    .selectBtn:hover { background-color: #2980b9; }
+    #finishBtn:disabled { opacity: .6; cursor: not-allowed; }
+  </style>
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/smoothness/jquery-ui.css">
+</head>
+<body>
+
+  <!-- Kolay Düzey Tangram -->
+  <div id="tTangramTray" class="blockTray">
+    <div class="block" style="width: 100px; height: 40px; background: yellowgreen;
+        clip-path: polygon(0% 0%, 41% 0%, 10% 100%, 0% 100%); margin-bottom: 10px;"></div>
+    <div class="block" style="width: 100px; height: 100px; background-color: mediumturquoise;
+        clip-path: polygon(30% 0%,100% 0%, 50% 90%, 50% 40%, 0% 40%, 0% 100%, 0% 40%); margin-bottom: 10px;"></div>
+    <div class="block" style="width: 0; height: 0; border-left: 22px solid transparent;
+        border-bottom: 40px solid crimson; margin-bottom: 10px;"></div>
+    <div class="block" style="width: 100px; height: 30px; background: green;
+        clip-path: polygon(0% 0%, 45% 0%, 100% 100%, 0% 100%); margin-bottom: 10px;"></div>
+  </div>
+
+  <!-- Orta Düzey Tangram -->
+  <div id="ortaTangramTray" class="blockTray">
+    <div class="block" style="width: 45px; height: 90px; background: yellow; clip-path: polygon(100% 0%, 0% 50%, 100% 100%); margin: 6px;"></div>
+    <div class="block" style="width: 45px; height: 90px; background: red; clip-path: polygon(100% 0%, 0% 50%, 100% 100%); margin: 6px;"></div>
+    <div class="block" style="width: 45px; height: 90px; background: green; clip-path: polygon(100% 0%, 0% 50%, 100% 100%); margin: 6px;"></div>
+    <div class="block" style="width: 45px; height: 90px; background: blue; clip-path: polygon(100% 0%, 0% 50%, 100% 100%); margin: 6px;"></div>
+
+    <div class="block" style="width: 45px; height: 90px; background: yellow; clip-path: polygon(100% 0%, 0% 50%, 100% 100%); margin: 6px;"></div>
+    <div class="block" style="width: 45px; height: 90px; background: red; clip-path: polygon(100% 0%, 0% 50%, 100% 100%); margin: 6px;"></div>
+    <div class="block" style="width: 45px; height: 90px; background: green; clip-path: polygon(100% 0%, 0% 50%, 100% 100%); margin: 6px;"></div>
+    <div class="block" style="width: 45px; height: 90px; background: blue; clip-path: polygon(100% 0%, 0% 50%, 100% 100%); margin: 6px;"></div>
+  </div>
+
+  <!-- Zor Düzey Tangram (Klasik 16 parça) -->
+  <div id="klasik2TangramTray" class="blockTray" style="display: none;">
+    <div class="block" style="width: 55px; height: 55px; background: yellow; margin: 6px;"></div>
+    <div class="block" style="width: 55px; height: 55px; background: red; margin: 6px;"></div>
+    <div class="block" style="width: 55px; height: 55px; background: green; margin: 6px;"></div>
+    <div class="block" style="width: 55px; height: 55px; background: blue; margin: 6px;"></div>
+
+    <div class="block" style="width: 45px; height: 100px; background: yellow; clip-path: polygon(100% 0%, 0% 50%, 100% 100%); margin: 6px;"></div>
+    <div class="block" style="width: 45px; height: 100px; background: red; clip-path: polygon(100% 0%, 0% 50%, 100% 100%); margin: 6px;"></div>
+    <div class="block" style="width: 45px; height: 100px; background: green; clip-path: polygon(100% 0%, 0% 50%, 100% 100%); margin: 6px;"></div>
+    <div class="block" style="width: 45px; height: 100px; background: blue; clip-path: polygon(100% 0%, 0% 50%, 100% 100%); margin: 6px;"></div>
+
+    <div class="block" style="width: 100px; height: 50px; background: yellow; clip-path: polygon(45% 0%, 100% 0%, 55% 100%, 0% 100%); margin: 6px;"></div>
+    <div class="block" style="width: 100px; height: 50px; background: red; clip-path: polygon(45% 0%, 100% 0%, 55% 100%, 0% 100%); margin: 6px;"></div>
+    <div class="block" style="width: 100px; height: 50px; background: green; clip-path: polygon(45% 0%, 100% 0%, 55% 100%, 0% 100%); margin: 6px;"></div>
+    <div class="block" style="width: 100px; height: 50px; background: blue; clip-path: polygon(45% 0%, 100% 0%, 55% 100%, 0% 100%); margin: 6px;"></div>
+
+    <div class="block" style="width: 100px; height: 50px; background: yellow; clip-path: polygon(55% 0%, 0% 0%, 45% 100%, 100% 100%); margin: 6px;"></div>
+    <div class="block" style="width: 100px; height: 50px; background: red; clip-path: polygon(55% 0%, 0% 0%, 45% 100%, 100% 100%); margin: 6px;"></div>
+    <div class="block" style="width: 100px; height: 50px; background: green; clip-path: polygon(55% 0%, 0% 0%, 45% 100%, 100% 100%); margin: 6px;"></div>
+    <div class="block" style="width: 100px; height: 50px; background: blue; clip-path: polygon(55% 0%, 0% 0%, 45% 100%, 100% 100%); margin: 6px;"></div>
+  </div>
+  
+  <div id="canvas">
+    <div id="instruction">Şekilleri buraya sürükleyin</div>
+  </div>
+  <div id="buttonWrapper">
+    <button id="finishBtn" class="finishBtn" disabled>👉 Bitti</button>
+  </div>
+  
+  <script>
+    $(document).ready(function () {
+      // 1) sessionId yoksa oluştur
+      try {
+        if (!localStorage.getItem('sessionId')) {
+          const id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + Math.random();
+          localStorage.setItem('sessionId', id);
+        }
+      } catch (e) {}
+
+      const selected = localStorage.getItem('selectedTangram'); // 'kolay' | 'orta' | 'zor'
+      const $finishBtn = $('#finishBtn');
+      let movedOnce = false;
+
+      if (selected === 'kolay') {
+        $('#tTangramTray').show();
+      } else if (selected === 'orta') {
+        $('#ortaTangramTray').show();
+      } else if (selected === 'zor') {
+        $('#klasik2TangramTray').show();
+      } else {
+        window.location.replace('./index2.html');
+        return;
+      }
+
+      // Sürükle-bırak
+      $('.block').draggable({
+        containment: 'window',
+        stack: '.block',
+        snap: true,
+        snapMode: 'outer',
+        snapTolerance: 13,
+        cursor: "grab",
+        start: function() { $('#instruction').fadeOut('slow'); },
+        stop: function() {
+          if (!movedOnce) {
+            movedOnce = true;
+            $finishBtn.prop('disabled', false);
+          }
+        }
+      });
+
+      // Tıklayınca 90° döndür
+      $(document).on('click', '.block', function () {
+        let currentRotation = $(this).data('rotation') || 0;
+        currentRotation += 90;
+        $(this).css('transform', 'rotate(' + currentRotation + 'deg)');
+        $(this).data('rotation', currentRotation);
+      });
+
+      // Bitti -> level'ı kaydet ve sessionId'yi URL ile index3'e taşı
+      $finishBtn.on('click', function () {
+        try { localStorage.setItem('tangram_done_level', selected); } catch(e) {}
+        // sessionId garanti
+        if (!localStorage.getItem('sessionId')) {
+            const id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + Math.random();
+            localStorage.setItem('sessionId', id);
+        }
+        const sid = encodeURIComponent(localStorage.getItem('sessionId') || '');
+        window.location.replace('./index3.html?sid=' + sid);
+        });
+
+      // (Opsiyonel) geri tuşu koruması
+      history.replaceState(null, '', location.href);
+      window.addEventListener('popstate', function () { history.go(1); });
+    });
+  </script>
+</body>
+</html>

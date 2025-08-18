@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Görev Seçimi</title>
+  <style>
+    table { border-collapse: collapse; width: 100%; text-align: center; }
+    th, td { border: 1px solid black; padding: 0; }
+    th { background-color: #d0e0ff; padding: 8px; }
+    img { width: 100%; height: auto; display: block; }
+    label { display: block; width: 100%; height: 100%; }
+    button {
+      background-color: #0088cc; color: white; padding: 10px 20px; border: none; border-radius: 8px;
+      font-size: 16px; cursor: pointer; box-shadow: 2px 2px 6px rgba(0,0,0,0.2); transition: background-color 0.3s ease; margin-top: 20px;
+    }
+    button:hover { background-color: #006699; }
+  </style>
+</head>
+<body>
+
+<h2>GÖREV PAYLAŞIMI</h2>
+
+<form id="gorevForm">
+  <table>
+    <tr>
+      <th>Görevler ➡ ⎯⎯⎯⎯⎯⎯ ZorlukDüzeyi ⬇</th>
+      <th>1. Görev</th><th>2. Görev</th><th>3. Görev</th><th>4. Görev</th><th>5. Görev</th>
+      <th>6. Görev</th><th>7. Görev</th><th>8. Görev</th><th>9. Görev</th><th>10. Görev</th>
+    </tr>
+
+    <!-- A Düzeyi -->
+    <tr>
+      <td>A Düzeyi</td>
+      <td><label><input type="radio" name="gorev1" value="Kolay"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev2" value="Kolay"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev3" value="Kolay"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev4" value="Kolay"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev5" value="Kolay"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev6" value="Kolay"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev7" value="Kolay"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev8" value="Kolay"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev9" value="Kolay"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev10" value="Kolay"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+    </tr>
+
+    <!-- B Düzeyi -->
+    <tr>
+      <td>B Düzeyi</td>
+      <td><label><input type="radio" name="gorev1" value="Orta"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev2" value="Orta"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev3" value="Orta"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev4" value="Orta"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev5" value="Orta"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev6" value="Orta"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev7" value="Orta"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev8" value="Orta"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev9" value="Orta"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev10" value="Orta"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+    </tr>
+
+    <!-- C Düzeyi -->
+    <tr>
+      <td>C Düzeyi</td>
+      <td><label><input type="radio" name="gorev1" value="Zor"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev2" value="Zor"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev3" value="Zor"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev4" value="Zor"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev5" value="Zor"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev6" value="Zor"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev7" value="Zor"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev8" value="Zor"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev9" value="Zor"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+      <td><label><input type="radio" name="gorev10" value="Zor"><img src="ca68123b-00b5-4554-af5b-dda7af85be19.png" alt="10 TL"></label></td>
+    </tr>
+  </table>
+
+  <button type="submit">Gönder</button>
+</form>
+
+<script>
+  const GAS_URL = "https://script.google.com/kendi_urlen/exec"; // <-- KENDİ LİNKİN
+
+  function getSessionId() {
+    const m = location.search.match(/[?&]sid=([^&]+)/);
+    if (m && m[1]) return decodeURIComponent(m[1]);
+    try {
+      const ls = localStorage.getItem('sessionId');
+      if (ls) return ls;
+    } catch (e) {}
+    return String(Date.now()) + Math.random();
+  }
+
+  document.getElementById("gorevForm").addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const answers = [];
+    for (let i = 1; i <= 10; i++) {
+      const sel = document.querySelector(`input[name="gorev${i}"]:checked`);
+      answers.push({ scene: i, answer: sel ? sel.value : "" });
+    }
+
+    const payload = {
+      sessionId: getSessionId(), // 🔑 artık hep aynı id
+      userAgent: navigator.userAgent,
+      level: (localStorage.getItem('tangram_done_level') || localStorage.getItem('selectedTangram') || null),
+      answers: answers
+    };
+
+    console.log("Gönderilecek veri:", payload);
+
+    try {
+      await fetch(GAS_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify(payload)
+      });
+      alert("Gönderildi! (Sheets’i kontrol et)");
+    } catch (err) {
+      console.error(err);
+      alert("Gönderimde hata oluştu!");
+    }
+  });
+</script>
+
+</body>
+</html>

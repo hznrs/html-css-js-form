@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>mesaj simülasyonu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e1e;
+      color: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+    #chatbox {
+      background: #2c2c2c;
+      max-width: 600px;
+      margin: auto;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+    }
+    #header {
+      background-color: #0088cc;
+      color: white;
+      padding: 12px;
+      font-size: 18px;
+      text-align: center;
+    }
+    #chat {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+    }
+    .message {
+      margin: 10px 0;
+      padding: 10px 15px;
+      border-radius: 15px;
+      background-color: #3a3a3a;
+      width: fit-content;
+      max-width: 100%;
+      overflow: visible;
+    }
+    .user {
+      font-weight: bold;
+      color: #4ea3e3;
+    }
+    .typing {
+      font-style: italic;
+      color: #888;
+      margin: 10px 0;
+    }
+    .options {
+      background-color: #262626;
+      padding: 10px;
+      border-top: 1px solid #444;
+    }
+    .options button {
+      display: block;
+      margin: 8px 0;
+      padding: 10px;
+      width: 100%;
+      border-radius: 6px;
+      border: none;
+      font-size: 15px;
+      cursor: pointer;
+      color: #fff;
+    }
+    .good { background-color: #0088ff; }
+    .bad  { background-color: #0088ff; }
+  </style>
+</head>
+<body>
+
+<div id="chatbox">
+  <div id="header">Çizim Atölyesi Grubu</div>
+  <div id="chat"></div>
+  <div class="options" id="choices"></div>
+</div>
+
+<script>
+/** En güncel Web App URL’İNİ buraya koy **/
+const WEB_APP_URL = "https://script.google.com/kendi_uzantını_ekle/exec";
+
+const chat = document.getElementById("chat");
+const choices = document.getElementById("choices");
+
+// Görselleri <img> ile gösterelim (iframe değil) kendin mesaj kutusuna dizi ekleyebilirsin.
+const conversations = [
+  [
+    { user: "Arda",  text: "Hangi kalemi kullanıyorsun Ekin?" },
+    { user: "Hazan", text: "Geçen paylaşılan videodaki çok tavsiye ediliyormuş. Kullanan var mı?" },
+    { user: "Ekin",  text: "Arkadaşım ondan kullanıyor, çok memnun değildi. Ben kendi kullandığımdan memnunum ama." },
+    { user: "Hazan", text: "Çizim detaylarını, renk geçişlerini vs. görebilmemiz için örnek bir çizimin var mı?" },
+    { user: "Ekin",  text: "<img src='1.png' alt='Ekin Çizim' style='border-radius:8px; max-width:100%; height:auto;'/>" },
+    { user: "Deniz", text: "kalemi almamak için ikna edici bir görsel olmuş 🤣😂" },
+    { user: "Ekin",  text: "Nasıl yani?" },
+    { user: "Deniz", text: "İşi ehline mi bırakmak lazım acaba ya, ne dersin?" }
+  ],
+  [
+    { user: "Ekin",  text: " Ben kendi tarzımda ilerlemeye çalışıyorum, belki herkesin beğenisi aynı değil :)" },
+    { user: "Deniz", text: "Tarz diyorsun da biraz daha özen göstermek tarzdan sayılmaz bence 🤷‍♂️" },
+    { user: "Ekin",  text: "Peki o zaman daha çok emek ve zaman ayırıp renklendirdiğim birkaç sahneyi atıyorum. Bu nasıl olmuş?" },
+    { user: "Ekin",  text: "<img src='2.png' alt='Ekin Çizim' style='border-radius:8px; max-width:100%; height:auto;'/>" },
+    { user: "Deniz", text: "Yine klasik pastel tonlar, yaratıcılık tatilde mi acaba? 🙃" },
+    { user: "Hazan", text: "Kalemin gayet iyi ekin fakat bana kalırsa genelde kendini tekrarladığın ve hep aynı tarz çalıştığın için yavaş gelişiyor çalışmaların." },
+    { user: "Arda",  text: "Çizim işleri çok kişisel bir alan. Kimi eleştiri motive eder, kimini kırabilir. Dengeyi bulmak zor gerçekten." }
+  ]
+];
+
+const options = [
+  [
+    { text: " Bence çizimin gayet güzel Ekin, herkesin tarzı farklıdır. Önemli olan senin emeğin ve gelişimin.", type: "good" },
+    { text: " Deniz, bu şekilde yorum yapmak kırıcı olabilir. Eleştiri yapacaksak biraz daha saygılı olabiliriz, değil mi?", type: "good" },
+    { text: " Çizimi görünce sanki ben de vazgeçerdim almaktan 🤣", type: "bad" },
+    { text: " Deniz güldürdün ya 😂 biraz sert olmuş ama komikti.", type: "bad" }
+  ],
+  [
+    { text: "Bence renk seçimlerin çok yumuşak ve uyumlu Ekin, çiziminin bir tarzı var. Bozma moralini.", type: "good" },
+    { text: "Deniz, yorumun biraz küçümseyici olmuş gibi. Daha yapıcı bir şekilde söyleyemez miydik bunu?", type: "good" },
+    { text: "Ahah evet, tatildeymiş gibi olmuş gerçekten 🙃 pastel çılgınlığı...", type: "bad" },
+    { text: "Deniz’in lafı biraz sivri ama sanki haklılık payı da var gibi ", type: "bad" }
+  ]
+];
+
+let sceneIndex = 0;
+let messageIndex = 0;
+let userResponses = 0;
+let selectedAnswers = [];
+
+// sessionId’yi garantiye al
+(function ensureSession() {
+  try {
+    if (!localStorage.getItem('sessionId')) {
+      const id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + Math.random();
+      localStorage.setItem('sessionId', id);
+    }
+  } catch (e) {}
+})();
+
+function showTyping(callback) {
+  const typing = document.createElement("div");
+  typing.classList.add("typing");
+  typing.textContent = "Yazıyor...";
+  chat.appendChild(typing);
+  chat.scrollTop = chat.scrollHeight;
+
+  setTimeout(() => {
+    chat.removeChild(typing);
+    callback();
+  }, 1000);
+}
+
+function showNextMessage() {
+  const currentScene = conversations[sceneIndex];
+
+  if (messageIndex < currentScene.length) {
+    const msg = currentScene[messageIndex];
+    showTyping(() => {
+      const div = document.createElement("div");
+      div.classList.add("message");
+      div.innerHTML = `<span class="user">${msg.user}:</span> ${msg.text}`;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+      messageIndex++;
+      setTimeout(showNextMessage, 800);
+    });
+  } else {
+    setTimeout(displayOptions, 600);
+  }
+}
+
+function displayOptions() {
+  choices.innerHTML = "";
+  const opts = options[sceneIndex];
+  opts.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.classList.add(opt.type);
+    btn.textContent = opt.text;
+    btn.onclick = () => respond(opt.text);
+    choices.appendChild(btn);
+  });
+}
+
+function respond(text) {
+  selectedAnswers.push({ scene: sceneIndex + 1, answer: text });
+
+  const div = document.createElement("div");
+  div.classList.add("message");
+  div.innerHTML = `<span class="user">Sen:</span> ${text}`;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+
+  userResponses++;
+  choices.innerHTML = "";
+
+  if (userResponses < conversations.length) {
+    sceneIndex++;
+    messageIndex = 0;
+    setTimeout(showNextMessage, 600);
+  } else {
+    const finalDiv = document.createElement("div");
+    finalDiv.classList.add("message");
+    finalDiv.innerHTML = "<em>Etkinlik sona erdi. Tepkileriniz değerlendirildi. Teşekkürler.</em>";
+    chat.appendChild(finalDiv);
+    choices.innerHTML = "";
+
+    // --- GÖNDERME BLOĞU ---
+    const sessionId = (function() {
+      try {
+        const existing = localStorage.getItem('sessionId');
+        if (existing) return existing;
+        const id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + Math.random();
+        localStorage.setItem('sessionId', id);
+        return id;
+      } catch (e) {
+        return String(Date.now()) + Math.random();
+      }
+    })();
+
+    const payload = {
+      sessionId,
+      userAgent: navigator.userAgent,
+      level: localStorage.getItem('selectedTangram') || null,
+      answers: selectedAnswers,               // CEVAPLAR BURADA
+      source: "index.html",
+      timestamp: new Date().toISOString()
+    };
+
+    const bodyStr = JSON.stringify(payload);
+    const blob = new Blob([bodyStr], { type: "text/plain" });
+
+    (async () => {
+      let delivered = false;
+      try {
+        if (navigator.sendBeacon) {
+          delivered = navigator.sendBeacon(WEB_APP_URL, blob);
+        }
+      } catch (_) {}
+
+      if (!delivered) {
+        try {
+          await fetch(WEB_APP_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "text/plain" },
+            body: bodyStr,
+            keepalive: true   // sayfa değişse de isteği tamamlamayı dener
+          });
+        } catch (_) {}
+      }
+
+      // Küçük gecikme: post’un flush edilmesine yardımcı olur
+      setTimeout(() => {
+        window.location.href = "./index2.html";
+      }, 150);
+    })();
+  }
+}
+
+showNextMessage();
+</script>
+
+</body>
+</html>
